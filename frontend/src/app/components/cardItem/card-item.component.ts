@@ -11,5 +11,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './card-item.component.scss'
 })
 export class CardItemComponent {
- @Input() product!: { id: number; name: string; price: number; img?: Text };
+ @Input() product!: { id: number; name: string; price: number; img?: string };
 }
