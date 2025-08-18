@@ -1,0 +1,112 @@
+.product-details {
+    max-width: 50%;
+    height: auto;
+    padding: 32px 24px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+
+}
+
+.box-container{
+      margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+}
+
+.cart-integration {
+    max-width: 50%;
+    height: 50%;
+    padding: 32px 24px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: #f0f0f0;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            &:hover {
+                background: #e0e0e0;
+            }
+        }
+
+        span {
+            min-width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+    }
+
+    .total-price {
+        p {
+            margin: 0;
+            font-size: 1.1rem;
+            strong {
+                font-weight: 600;
+            }
+        }
+    }
+
+    .add-to-cart-btn {
+        margin-top: 12px;
+        padding: 12px 0;
+        background: #1976d2;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        &:hover {
+            background: #1565c0;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .cart-integration {
+        max-width: 100%;
+        padding: 16px 8px;
+        gap: 16px;
+
+        .add-to-cart-btn {
+            padding: 10px 0;
+            font-size: 0.95rem;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .product-details {
+        padding: 16px 8px;
+        max-width: 100%;
+        .card-image {
+            max-width: 100%;
+        }
+        h2 {
+            font-size: 1.3rem;
+        }
+        p {
+            font-size: 1rem;
+        }
+    }
+}

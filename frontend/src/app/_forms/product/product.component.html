@@ -1,0 +1,127 @@
+<div class="product-form-container">
+  <h2>Cadastro de Produto</h2>
+  
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+    
+    <!-- Name Field -->
+    <div class="form-group">
+      <label for="name">Nome do Produto*</label>
+      <input 
+        type="text" 
+        id="name" 
+        formControlName="name" 
+        placeholder="Digite o nome do produto"
+        [class.error]="productForm.get('name')?.invalid && productForm.get('name')?.touched"
+      >
+      <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="error-message">
+        <span *ngIf="productForm.get('name')?.errors?.['required']">Nome é obrigatório</span>
+        <span *ngIf="productForm.get('name')?.errors?.['minlength']">Mínimo 3 caracteres</span>
+      </div>
+    </div>
+
+    <!-- Price Field -->
+    <div class="form-group">
+      <label for="price">Preço*</label>
+      <input 
+        type="number" 
+        id="price" 
+        formControlName="price" 
+        placeholder="0.00"
+        step="0.01"
+        min="0"
+        [class.error]="productForm.get('price')?.invalid && productForm.get('price')?.touched"
+      >
+      <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" class="error-message">
+        <span *ngIf="productForm.get('price')?.errors?.['required']">Preço é obrigatório</span>
+        <span *ngIf="productForm.get('price')?.errors?.['min']">Preço deve ser maior que zero</span>
+      </div>
+    </div>
+
+    <!-- Category Field -->
+    <div class="form-group">
+      <label for="category">Categoria*</label>
+      <select 
+        id="category" 
+        formControlName="category"
+        [class.error]="productForm.get('category')?.invalid && productForm.get('category')?.touched"
+      >
+        <option value="">Selecione uma categoria</option>
+        <option value="medicamentos">Medicamentos</option>
+        <option value="higiene">Higiene</option>
+        <option value="cosmeticos">Cosméticos</option>
+        <option value="alimentos">Alimentos</option>
+        <option value="suplementos">Suplementos</option>
+        <option value="outros">Outros</option>
+      </select>
+      <div *ngIf="productForm.get('category')?.invalid && productForm.get('category')?.touched" class="error-message">
+        <span>Categoria é obrigatória</span>
+      </div>
+    </div>
+
+    <!-- Description Field -->
+    <div class="form-group">
+      <label for="description">Descrição</label>
+      <textarea 
+        id="description" 
+        formControlName="description" 
+        placeholder="Descreva o produto..."
+        rows="4"
+        [class.error]="productForm.get('description')?.invalid && productForm.get('description')?.touched"
+      ></textarea>
+      <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched" class="error-message">
+        <span *ngIf="productForm.get('description')?.errors?.['maxlength']">Máximo 500 caracteres</span>
+      </div>
+    </div>
+
+    <!-- Image Field -->
+    <div class="form-group">
+      <label for="img">Imagem do Produto</label>
+      <div class="image-upload-container">
+        <input 
+          type="file" 
+          id="img" 
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          #fileInput
+        >
+        <div class="image-preview" *ngIf="previewUrl">
+          <img [src]="previewUrl" alt="Preview" class="preview-image">
+          <button type="button" class="remove-image" (click)="removeImage()">×</button>
+        </div>
+        <button 
+          type="button" 
+          class="upload-btn" 
+          (click)="fileInput.click()"
+          *ngIf="!previewUrl"
+        >
+          Escolher Imagem
+        </button>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="onCancel()"
+      >
+        Cancelar
+      </button>
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        [disabled]="productForm.invalid || isLoading"
+      >
+        <span *ngIf="!isLoading">Salvar Produto</span>
+        <span *ngIf="isLoading">Salvando...</span>
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<!-- Success Message -->
+<div *ngIf="showSuccessMessage" class="success-message">
+  Produto cadastrado com sucesso!
+</div>
