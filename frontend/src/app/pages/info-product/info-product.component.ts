@@ -16,7 +16,7 @@ export class InfoProductComponent implements OnInit {
   product: Product = {
     id: 0,
     name: '',
-    img: new Text(''),
+    img: '',
     price: 0,
     description: '',
     category: '',

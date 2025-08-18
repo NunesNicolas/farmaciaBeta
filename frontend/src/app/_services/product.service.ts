@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { register } from 'module';
 
 export interface Product {
   id: number;
   name: string;
-  img: Text;
+  img: string;
   price: number;
   description: string;
   category: string;
@@ -15,6 +16,14 @@ export interface Product {
   providedIn: 'root'
 })
 export class ProductService {
+  product: Product = {
+    id: 0,
+    name: '',
+    img: '',
+    price: 0,
+    description: '',
+    category: '',
+  };
 
   private apiUrl = 'http://localhost:8000/api/products';
 
@@ -26,6 +35,12 @@ export class ProductService {
 
    getProductById(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`);
+
+    
   }
+
+  registerProduct(product: Product): Observable<Product> {
+      return this.http.post<Product>(this.apiUrl, product);
+    }
 }
 
