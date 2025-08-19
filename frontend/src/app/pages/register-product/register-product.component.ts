@@ -22,38 +22,63 @@ export class RegisterProductComponent  {
   constructor(private productService: ProductService) {}
 
   onFormSubmit(formData: any) {
-    // Map form data to product interface
-    this.product = {
-      id: 0,
+    const productData = {
       name: formData.name,
-      img: formData.img ? formData.img : '',
-      price: formData.price,
-      description: formData.description,
+      price: parseFloat(formData.price),
+      description: formData.description || '',
       category: formData.category,
+      img: formData.img || ''
     };
 
-    this.registerProduct();
+    this.registerProduct(productData);
   }
 
-  registerProduct() {
-    this.productService.registerProduct(this.product).subscribe(
+  registerProduct(productData: any) {
+    this.productService.registerProduct(productData).subscribe(
       (response) => {
         console.log('Product registered successfully:', response);
         alert('Produto cadastrado com sucesso!');
+        this.resetForm();
       },
       (error) => {
         console.error('Error registering product:', error);
-        alert('Erro ao cadastrar produto. Por favor, tente novamente.');
+        
+        let errorMessage = 'Erro ao cadastrar produto. ';
+        
+        if (error.status === 422) {
+          const validationErrors = error.error.errors;
+          if (validationErrors) {
+            const messages = Object.values(validationErrors).flat();
+            errorMessage += messages.join('. ');
+          } else {
+            errorMessage += 'Por favor, verifique os dados informados.';
+          }
+        } else if (error.status === 0) {
+          errorMessage += 'Verifique sua conexão com o servidor.';
+        } else if (error.status >= 500) {
+          errorMessage += 'Erro no servidor. Tente novamente mais tarde.';
+        } else {
+          errorMessage += error.error.message || 'Tente novamente.';
+        }
+        
+        alert(errorMessage);
       }
     );
   }
 
+  resetForm() {
+    this.product = {
+      id: 0,
+      name: '',
+      img: '',
+      price: 0,
+      description: '',
+      category: '',
+    };
+  }
+
   onFormCancel() {
-    // Handle form cancellation
+    this.resetForm();
     console.log('Form cancelled');
   }
 }
-
-
-
-
