@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { formProduct } from '../../_forms/formProduct/formProduct.component'
 import { ProductService, Product } from '../../_services/product.service';
 import { HeaderComponent } from "../../components/header/header.component";
@@ -19,7 +20,10 @@ export class RegisterProductComponent  {
       category: '',
     };
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private router: Router
+  ) {}
 
   onFormSubmit(formData: any) {
     const productData = {
@@ -38,7 +42,7 @@ export class RegisterProductComponent  {
       (response) => {
         console.log('Product registered successfully:', response);
         alert('Produto cadastrado com sucesso!');
-        this.resetForm();
+        this.router.navigate(['/']);
       },
       (error) => {
         console.error('Error registering product:', error);

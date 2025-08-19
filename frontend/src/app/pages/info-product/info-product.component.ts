@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService, Product } from '../../_services/product.service';
 import { CardItemComponent } from '../../components/cardItem/card-item.component';
 import { HeaderComponent } from "../../components/header/header.component";
@@ -10,7 +10,7 @@ import { HeaderComponent } from "../../components/header/header.component";
   standalone: true,
   imports: [CommonModule, CardItemComponent, HeaderComponent],
   templateUrl: './info-product.component.html',
-  styleUrls: ['./info-product.component.scss'] // plural
+  styleUrls: ['./info-product.component.scss']
 })
 export class InfoProductComponent implements OnInit {
   product: Product = {
@@ -24,7 +24,8 @@ export class InfoProductComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,5 +38,13 @@ export class InfoProductComponent implements OnInit {
       alert('Produto não encontrado.');
       window.history.back();
     }
+  }
+
+  isAdmin(): boolean {
+    return localStorage.getItem('userRole') === 'admin';
+  }
+
+  editProduct(): void {
+    this.router.navigate(['/product', this.product.id, 'edit']);
   }
 }
