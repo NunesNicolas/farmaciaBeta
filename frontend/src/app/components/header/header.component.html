@@ -1,7 +1,7 @@
 <header class="header">
-    <div class="logo">
-        <img src="../../assets/logo.ico" alt="Farmácia Beta Logo" height="40">
-    </div>
+    <a class="logo" href="/">
+        <img src="assets/logo.ico" alt="Farmácia Beta" height="40">
+    </a>
     <div class="header-actions">
         <div class="admin-actions" *ngIf="isAdmin">
             <button class="register-product-btn" (click)="navigateToProductRegister()">
@@ -9,8 +9,9 @@
             </button>
         </div>
         <div class="login-icon">
-            <a href="/login">
-                <img src="../../assets/login-icon.svg" alt="{{user.name}}" height="32">
+            <a href="/login" class="user-icon-link">
+                <i class="bi bi-person-circle" style="font-size: 2rem; color: #333;"></i>
+                <span class="user-icon-text">{{user.name}}</span>
             </a>
         </div>
         <div class="logout-icon">
