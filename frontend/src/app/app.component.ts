@@ -14,6 +14,6 @@ export class AppComponent implements OnInit {
   constructor(private tSvc: HttpTokenService) {}
 
   ngOnInit(): void {
-    this.tSvc.getCrsfToken();
+    this.tSvc.getCrsfToken().subscribe(x => console.log(x));
   }
 }
