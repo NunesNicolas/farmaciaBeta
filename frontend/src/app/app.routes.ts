@@ -10,7 +10,7 @@ import { LoginComponent } from './pages/login/login.component';
 export const routes: Routes = [
       { path: '', component: ShowcaseComponent },
       { path: 'product/:id', component: InfoProductComponent },
-      { path: 'register-product', component: RegisterProductComponent },
+      { path: 'registerProduct', component: RegisterProductComponent },
       { path: 'login', component: LoginComponent }
 ];
 
