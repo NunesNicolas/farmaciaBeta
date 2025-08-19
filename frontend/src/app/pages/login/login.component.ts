@@ -38,7 +38,7 @@ export class LoginComponent {
         }).subscribe({
           next: (response) => {
             this.isLoading = false;
-            // Redirect to dashboard or home page
+            console.log('Login successful:', response);
             this.router.navigate(['/']);
           },
           error: (error) => {
