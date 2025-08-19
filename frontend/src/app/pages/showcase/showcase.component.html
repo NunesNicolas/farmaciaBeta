@@ -3,3 +3,51 @@
   <app-card-item *ngFor="let product of products" [product]="product"></app-card-item>
 </div>
 
+<div *ngIf="errMessage" class="error-message">
+  {{ errMessage }}
+</div>
+
+<div class="pagination-container">
+  <nav class="pagination-nav" aria-label="Paginação de produtos">
+    <button 
+      class="pagination-btn pagination-btn--prev" 
+      (click)="prevPage()" 
+      [disabled]="currentPage === 1"
+      aria-label="Página anterior">
+      <svg class="pagination-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Anterior
+    </button>
+
+    <div class="pagination-numbers">
+      <button 
+        *ngFor="let page of getPageNumbers()" 
+        class="pagination-number"
+        [class.active]="page === currentPage"
+        [class.ellipsis]="page === -1"
+        [disabled]="page === -1"
+        (click)="page !== -1 && loadProducts(page)"
+        [attr.aria-label]="'Ir para página ' + page"
+        [attr.aria-current]="page === currentPage ? 'page' : null">
+        {{ page === -1 ? '...' : page }}
+      </button>
+    </div>
+
+    <button 
+      class="pagination-btn pagination-btn--next" 
+      (click)="nextPage()" 
+      [disabled]="currentPage === lastPage"
+      aria-label="Próxima página">
+      Próximo
+      <svg class="pagination-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="pagination-info">
+    <span>Página {{ currentPage }} de {{ lastPage }}</span>
+    <span class="pagination-total">{{ products.length }} produtos</span>
+  </div>
+</div>

@@ -46,8 +46,8 @@ export class ProductService {
       .map(cookie => decodeURIComponent(cookie.substring(nameLenPlus)))[0] || null;
   }
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl, {
+  getProducts(page: number = 1,  perPage: number = 10): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}?page=${page}&perPage=${perPage}`, {
       withCredentials: true
     });
   }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->double('price')->nullable();
             $table->longText("img", 150)->nullable();
-            $table->string('caregory')->nullable();
+            $table->enum('category', ['medicamento', 'cosmetico', 'alimento', 'higiene', 'suplementos', 'outros'])->nullable();
             $table->longText('description')->nullable();
             $table->timestamps();
         });
