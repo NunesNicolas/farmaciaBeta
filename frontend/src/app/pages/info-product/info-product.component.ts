@@ -45,6 +45,6 @@ export class InfoProductComponent implements OnInit {
   }
 
   editProduct(): void {
-    this.router.navigate(['/product', this.product.id, 'edit']);
+    this.router.navigate(['/product', this.product.id, 'edit'], { state: { product: this.product } });
   }
 }

@@ -1,15 +1,17 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Product } from '../../_services/product.service';
 
 @Component({
   selector: 'app-formproduct',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './formproduct.component.html',
-  styleUrl: './formproduct.component.scss'
+  templateUrl: './formProduct.component.html',
+  styleUrl: './formProduct.component.scss'
 })
-export class formProduct {
+export class formProduct implements OnInit, OnChanges {
+  @Input() productData: Product | null = null;
   @Output() formSubmit = new EventEmitter<any>();
   @Output() formCancel = new EventEmitter<void>();
   
@@ -28,13 +30,47 @@ export class formProduct {
     });
   }
 
+  ngOnInit() {
+    // Se productData for passado via @Input(), usar esses dados
+    if (this.productData) {
+      this.populateForm();
+    }
+    // Caso contrário, verificar history.state (para casos de navegação)
+    else if (history.state && history.state['product']) {
+      this.productData = history.state['product'];
+      this.populateForm();
+    }
+  }
+
+  ngOnChanges() {
+    // Se productData mudar após o init, atualizar o formulário
+    if (this.productData) {
+      this.populateForm();
+    }
+  }
+
+  populateForm() {
+    if (this.productData) {
+      this.productForm.patchValue({
+        name: this.productData.name || '',
+        price: this.productData.price || 0,
+        description: this.productData.description || '',
+        category: this.productData.category || '',
+        img: this.productData.img || null
+      });
+      
+      if (this.productData.img) {
+        this.previewUrl = this.productData.img;
+      }
+    }
+  }
+
   onSubmit() {
     if (this.productForm.valid) {
       this.isLoading = true;
       
       const formData = this.productForm.value;
       
-      // Emit the form data to parent component
       this.formSubmit.emit(formData);
     }
   }
@@ -119,5 +155,6 @@ export class formProduct {
     this.productForm.reset();
     this.previewUrl = null;
     this.showSuccessMessage = false;
+    this.formCancel.emit();
   }
 }

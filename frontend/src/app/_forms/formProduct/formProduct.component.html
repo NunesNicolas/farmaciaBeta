@@ -1,5 +1,5 @@
 <div class="product-form-container">
-  <h2>Cadastro de Produto</h2>
+  <h2>{{ productData ? 'Editar Produto' : 'Cadastro de Produto' }}</h2>
   
   <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
     
