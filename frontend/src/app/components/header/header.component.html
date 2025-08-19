@@ -2,9 +2,19 @@
     <div class="logo">
         <img src="../../assets/logo.ico" alt="Farmácia Beta Logo" height="40">
     </div>
-    <div class="login-icon">
-        <a href="/login">
-            <img src="../../assets/login-icon.svg" alt="{{user.name}}" height="32">
-        </a>
+    <div class="header-actions">
+        <div class="admin-actions" *ngIf="isAdmin">
+            <button class="register-product-btn" (click)="navigateToProductRegister()">
+                Cadastrar Produto
+            </button>
+        </div>
+        <div class="login-icon">
+            <a href="/login">
+                <img src="../../assets/login-icon.svg" alt="{{user.name}}" height="32">
+            </a>
+        </div>
+        <div class="logout-icon">
+            <button class="logout-btn" (click)="logout()">Logout</button>
+        </div>
     </div>
 </header>

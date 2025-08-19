@@ -31,7 +31,7 @@ export class LoginComponent {
     // First, get the CSRF token
     this.httpTokenService.getCrsfToken().subscribe({
       next: () => {
-        // Then attempt login
+        // Then attempt login with proper confirmation
         this.usersService.login({
           email: this.email,
           password: this.password
@@ -39,16 +39,34 @@ export class LoginComponent {
           next: (response) => {
             this.isLoading = false;
             console.log('Login successful:', response);
-            this.router.navigate(['/']);
+            
+            // Only navigate after successful confirmation
+            if (response && response.status !== 'error') {
+              this.router.navigate(['/']);
+            } else {
+              this.errorMessage = response.message || 'Login falhou. Por favor, verifique suas credenciais.';
+            }
           },
           error: (error) => {
             this.isLoading = false;
-            this.errorMessage = error.error?.message || 'Erro ao fazer login. Verifique suas credenciais.';
+            console.error('Login error:', error);
+            
+            // Handle different error types
+            if (error.status === 422) {
+              this.errorMessage = 'Credenciais inválidas. Por favor, verifique seu email e senha.';
+            } else if (error.status === 401) {
+              this.errorMessage = 'Email ou senha incorretos.';
+            } else if (error.error?.message) {
+              this.errorMessage = error.error.message;
+            } else {
+              this.errorMessage = 'Erro ao fazer login. Verifique suas credenciais e tente novamente.';
+            }
           }
         });
       },
       error: (error) => {
         this.isLoading = false;
+        console.error('CSRF token error:', error);
         this.errorMessage = 'Erro ao obter token de segurança. Tente novamente.';
       }
     });
