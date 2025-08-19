@@ -17,16 +17,41 @@ export class LoginComponent {
   password: string = '';
   isLoading: boolean = false;
   errorMessage: string = '';
+  emailError: string = '';
+  passwordError: string = '';
 
   constructor(
     private usersService: UsersService,
     private httpTokenService: HttpTokenService,
     private router: Router
-  ) {}
+  ) {
+    // Force page reload when accessing login page
+    
+  }
 
   onSubmit() {
+    this.clearErrors();
     this.isLoading = true;
     this.errorMessage = '';
+
+    // Validate email
+    if (!this.email) {
+      this.emailError = 'Email é obrigatório';
+    } else if (!this.isValidEmail(this.email)) {
+      this.emailError = 'Email inválido';
+    }
+
+    // Validate password
+    if (!this.password) {
+      this.passwordError = 'Senha é obrigatória';
+    } else if (this.password.length < 6) {
+      this.passwordError = 'Senha deve ter pelo menos 6 caracteres';
+    }
+
+    if (this.emailError || this.passwordError) {
+      this.isLoading = false;
+      return;
+    }
 
     // First, get the CSRF token
     this.httpTokenService.getCrsfToken().subscribe({
@@ -42,7 +67,8 @@ export class LoginComponent {
             
             // Only navigate after successful confirmation
             if (response && response.status !== 'error') {
-              this.router.navigate(['/']);
+              // Force page reload to clear history
+              window.location.href = '/';
             } else {
               this.errorMessage = response.message || 'Login falhou. Por favor, verifique suas credenciais.';
             }
@@ -56,6 +82,8 @@ export class LoginComponent {
               this.errorMessage = 'Credenciais inválidas. Por favor, verifique seu email e senha.';
             } else if (error.status === 401) {
               this.errorMessage = 'Email ou senha incorretos.';
+            } else if (error.status === 429) {
+              this.errorMessage = 'Muitas tentativas. Tente novamente mais tarde.';
             } else if (error.error?.message) {
               this.errorMessage = error.error.message;
             } else {
@@ -70,5 +98,16 @@ export class LoginComponent {
         this.errorMessage = 'Erro ao obter token de segurança. Tente novamente.';
       }
     });
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  private clearErrors() {
+    this.emailError = '';
+    this.passwordError = '';
+    this.errorMessage = '';
   }
 }
