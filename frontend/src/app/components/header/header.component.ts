@@ -34,7 +34,6 @@ export class HeaderComponent implements OnInit {
           };
           this.isAdmin = userData.category == 'admin';
           
-          // Store user role in localStorage for guard
           localStorage.setItem('userRole', userData.category || '');
         }
       },
