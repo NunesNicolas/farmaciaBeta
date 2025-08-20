@@ -1,12 +1,113 @@
+// Filter Container Styles
+.filter-container {
+  margin: 1.5rem auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.filter-form {
+  display: flex;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.filter-container h3 {
+  color: #1e293b;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #82ada3;
+}
+
+.filter-group {
+  margin-bottom: 1rem;
+  width: 30%;
+  
+
+  label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.875rem;
+    
+  }
+
+  select,
+  input[type="number"] {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #82ada3;
+      box-shadow: 0 0 0 2px rgba(130, 173, 163, 0.2);
+    }
+  }
+
+  select {
+    cursor: pointer;
+    background-color: #ffffff;
+  }
+}
+
+.filter-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  .btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.btn-primary {
+      background: #82ada3;
+      color: white;
+
+      &:hover {
+        background: #4f7c78;
+      }
+    }
+
+    &.btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+
+      &:hover {
+        background: #e5e7eb;
+      }
+    }
+  }
+}
+
+// Products Container
 .products-container {
   margin-top: 5vh;
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
   padding: 0 20px;
-  justify-content: center;
+  justify-content: center; 
 }
 
+// Pagination Styles
 .pagination-container {
   margin: 40px 0;
   display: flex;
@@ -27,22 +128,19 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 8px 16px;
   border: 1px solid #e2e8f0;
   background: white;
   color: #82ada3;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
   &:hover:not(:disabled) {
     background: #f8fafc;
-    border-color: #cbd5e1;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-color: #82ada3;
   }
 
   &:disabled {
@@ -50,62 +148,26 @@
     color: #94a3b8;
     cursor: not-allowed;
     opacity: 0.6;
-    transform: none;
-    box-shadow: none;
   }
-
-  &.pagination-btn--prev {
-    .pagination-icon {
-      margin-right: 4px;
-    }
-  }
-
-  &.pagination-btn--next {
-    .pagination-icon {
-      margin-left: 4px;
-    }
-  }
-}
-
-.pagination-icon {
-  width: 16px;
-  height: 16px;
-}
-
-.pagination-numbers {
-  display: flex;
-  gap: 4px;
-  align-items: center;
 }
 
 .pagination-number {
-  min-width: 40px;
-  height: 40px;
+  min-width: 36px;
+  height: 36px;
   padding: 0 8px;
   border: 1px solid #e2e8f0;
   background: white;
   color: #475569;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover:not(:disabled):not(.ellipsis) {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    transform: translateY(-1px);
-  }
 
   &.active {
-    background: #3b82f6;
+    background: #82ada3;
     color: white;
-    border-color: #3b82f6;
-    font-weight: 600;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+    border-color: #82ada3;
   }
 
   &.ellipsis {
@@ -113,36 +175,43 @@
     border: none;
     color: #94a3b8;
     cursor: default;
-    font-weight: bold;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .filter-container {
+    margin: 1rem auto;
+    padding: 0 15px;
+  }
+
+  .filter-form {
+    padding: 1rem;
+  }
+
+  .filter-actions {
+    flex-direction: column;
     
-    &:hover {
-      transform: none;
-      background: transparent;
+    .btn {
+      width: 100%;
+      max-width: 200px;
     }
   }
+}
 
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
+@media (max-width: 480px) {
+  .filter-form {
+    padding: 0.75rem;
+  }
+
+  .filter-group select,
+  .filter-group input[type="number"] {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
   }
 }
 
-.pagination-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  color: #64748b;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.pagination-total {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-// Mensagem de erro
+// Error and empty states
 .error-message {
   text-align: center;
   color: #ef4444;
@@ -154,72 +223,13 @@
   border-radius: 8px;
 }
 
-@media (max-width: 768px) {
-  .pagination-container {
-    margin: 30px 0;
-    gap: 16px;
-  }
-
-  .pagination-nav {
-    gap: 8px;
-  }
-
-  .pagination-btn {
-    padding: 10px 16px;
-    font-size: 13px;
-  }
-
-  .pagination-number {
-    min-width: 36px;
-    height: 36px;
-    font-size: 13px;
-  }
-
-  .pagination-info {
-    font-size: 13px;
-  }
+.no-products-message {
+  text-align: center;
+  color: #64748b;
+  font-size: 16px;
+  margin: 40px 20px;
+  padding: 2rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
 }
-
-@media (max-width: 480px) {
-  .products-container {
-    padding: 0 10px;
-    gap: 12px;
-  }
-
-  .pagination-container {
-    margin: 20px 0;
-  }
-
-  .pagination-btn {
-    padding: 8px 12px;
-    font-size: 12px;
-  }
-
-  .pagination-number {
-    min-width: 32px;
-    height: 32px;
-    font-size: 12px;
-  }
-
-  .pagination-numbers {
-    gap: 2px;
-  }
-}
-
-// Animações
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.pagination-container {
-  animation: fadeIn 0.3s ease-out;
-}
-
-// Tema escuro (opcional - se o sistema tiver dark mode)

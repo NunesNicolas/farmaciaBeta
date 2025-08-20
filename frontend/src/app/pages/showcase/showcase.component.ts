@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ProductService, Product } from '../../_services/product.service';
 import { CardItemComponent } from '../../components/cardItem/card-item.component';
 import { HttpTokenService } from '../../auth/http-token.service';
 
 @Component({
   selector: 'app-showcase',
-  imports: [CommonModule, HeaderComponent, CardItemComponent],
+  imports: [CommonModule, FormsModule, HeaderComponent, CardItemComponent],
   templateUrl: './showcase.component.html',
   styleUrl: './showcase.component.scss',
 })
@@ -20,22 +21,52 @@ export class ShowcaseComponent {
   lastPage = 1;
   products: Product[] = [];
 
+  selectedCategory: string = '';
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  categories: string[] = [];
+
+  isFilterModalOpen = false;
+
   constructor(
     private productService: ProductService,
     private svc: HttpTokenService
   ) {}
 
   loadProducts(page: number = 1) {
-  this.currentPage = page; // <-- garante que a página atual muda antes da requisição
+    this.currentPage = page;
 
-  this.productService.getProducts(page, this.perPage).subscribe((res: any) => {
-    console.log(res);
-    this.products = res.data;
+    this.productService.getProducts(
+      page, 
+      this.perPage,
+      this.selectedCategory || undefined,
+      this.minPrice || undefined,
+      this.maxPrice || undefined
+    ).subscribe((res: any) => {
+      this.products = res.data;
+      this.currentPage = res.current_page;
+      this.lastPage = res.last_page;
+    });
+  }
 
-    this.currentPage = res.current_page;
-    this.lastPage = res.last_page;
-  });
-}
+  loadCategories() {
+    this.productService.getProducts(1, 100).subscribe((res: any) => {
+      const uniqueCategories = [...new Set(res.data.map((product: Product) => product.category))];
+      this.categories = uniqueCategories as string[];
+    });
+  }
+
+  applyFilters() {
+    this.currentPage = 1;
+    this.loadProducts(1);
+  }
+
+  clearFilters() {
+    this.selectedCategory = '';
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.loadProducts(1);
+  }
 
   nextPage() {
     if (this.currentPage < this.lastPage) {
@@ -86,6 +117,35 @@ export class ShowcaseComponent {
     }
     
     return pages;
+  }
+
+  // Modal methods
+  openFilterModal() {
+    this.isFilterModalOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeFilterModal() {
+    this.isFilterModalOpen = false;
+    document.body.style.overflow = '';
+  }
+
+  applyFiltersAndClose() {
+    this.applyFilters();
+    this.closeFilterModal();
+  }
+
+  clearFiltersAndClose() {
+    this.clearFilters();
+    this.closeFilterModal();
+  }
+
+  // Close modal on ESC key
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscapeKey(event: KeyboardEvent) {
+    if (this.isFilterModalOpen) {
+      this.closeFilterModal();
+    }
   }
 
   ngOnInit(): void {

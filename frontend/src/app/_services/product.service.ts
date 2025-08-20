@@ -33,8 +33,22 @@ export class ProductService {
     private authService: AuthService
   ) {}
 
-  getProducts(page: number = 1,  perPage: number = 10): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}?page=${page}&perPage=${perPage}`, 
+  getProducts(page: number = 1, perPage: number = 10, category?: string, minPrice?: number, maxPrice?: number): Observable<any> {
+    let url = `${this.apiUrl}?page=${page}&perPage=${perPage}`;
+    
+    if (category) {
+      url += `&category=${encodeURIComponent(category)}`;
+    }
+    
+    if (minPrice !== undefined && minPrice !== null) {
+      url += `&min_price=${minPrice}`;
+    }
+    
+    if (maxPrice !== undefined && maxPrice !== null) {
+      url += `&max_price=${maxPrice}`;
+    }
+    
+    return this.http.get<any>(url, 
       this.authService.getBasicOptions()
     );
   }

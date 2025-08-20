@@ -1,10 +1,46 @@
 <app-header></app-header>
+
+<div class="filter-container">
+      <h3 style="text-align: center;">Filtrar Produtos</h3>
+  <div class="filter-form">
+
+    
+    <div class="filter-group">
+      <label for="category">Categoria:</label>
+      <select id="category" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+        <option value="">Todas as Categorias</option>
+        <option value="medicamento">Medicamentos</option>
+        <option value="cosmetico">Cosméticos</option>
+        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="minPrice">Preço Mínimo:</label>
+      <input type="number" id="minPrice" [(ngModel)]="minPrice" placeholder="0" (change)="applyFilters()" min="0" step="0.01">
+    </div>
+
+    <div class="filter-group">
+      <label for="maxPrice">Preço Máximo:</label>
+      <input type="number" id="maxPrice" [(ngModel)]="maxPrice" placeholder="9999" (change)="applyFilters()" min="0" step="0.01">
+    </div>
+  </div>
+  <div class="filter-actions">
+      <button class="btn btn-primary" (click)="applyFilters()">Aplicar Filtros</button>
+      <button class="btn btn-secondary" (click)="clearFilters()">Limpar Filtros</button>
+    </div>
+</div>
+
 <div class="products-container">
   <app-card-item *ngFor="let product of products" [product]="product"></app-card-item>
 </div>
 
 <div *ngIf="errMessage" class="error-message">
   {{ errMessage }}
+</div>
+
+<div *ngIf="products.length === 0" class="no-products-message">
+  Nenhum produto encontrado com os filtros aplicados.
 </div>
 
 <div class="pagination-container">

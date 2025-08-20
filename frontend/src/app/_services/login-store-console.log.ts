@@ -1,4 +1,3 @@
-// tentativa de tratamento erros
 
 console.log('Dados do usuário autenticado:', {
   id: user.id,
