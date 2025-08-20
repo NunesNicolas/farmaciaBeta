@@ -1,28 +1,21 @@
 <app-header></app-header>
-<div class="box-container">
-<div class="product-details">
-     <div class="card-image">
-        <img [src]="product.img" [alt]="product.name" style="width: 100%; height: auto;"/>
-    </div>
-    <h2>{{ product.name }}</h2>
-    <p><strong>Descrição:</strong> {{ product.description }}</p>
-    <p><strong>Preço:</strong> R$ {{ product.price }}</p>
-    <p><strong>Categoria:</strong> {{ product.category }}</p>
-</div>
-<div class="cart-integration">
-    <div class="quantity-control">
-        <button aria-label="Diminuir quantidade">-</button>
-        <span>1</span>
-        <button aria-label="Aumentar quantidade">+</button>
-    </div>
-    <div class="total-price">
-        <p><strong>Total:</strong> R$ {{ product.price }}</p>
-    </div>
-    <button class="add-to-cart-btn">
-        Adicionar ao carrinho
+<div class="product-container">
+  <div class="image-container">
+      <button *ngIf="isAdmin()" class="edit-btn" (click)="editProduct()">
+      <i class="bi bi-pencil-square"></i>
     </button>
-    <button *ngIf="isAdmin()" class="edit-product-btn" (click)="editProduct()" style="margin-top: 10px; background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-        Editar Produto (Admin)
-    </button>
-</div>
+    <img [src]="product.img" [alt]="product.name" class="product-image"/>
+  </div>
+  
+  <div class="info-container">
+    <div class="product-info">
+      <h2>{{ product.name }}</h2>
+     
+      <h3 class="price"><strong>Preço:</strong> R$ {{ product.price }}</h3>
+      <h4 class="category"><strong>Categoria:</strong> {{ product.category }}</h4>
+      <p class="description"><strong>Descrição:</strong> {{ product.description }}</p>
+    </div>
+    
+  
+  </div>
 </div>

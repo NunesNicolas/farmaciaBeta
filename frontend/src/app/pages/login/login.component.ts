@@ -25,7 +25,6 @@ export class LoginComponent {
     private httpTokenService: HttpTokenService,
     private router: Router
   ) {
-    // Force page reload when accessing login page
     
   }
 
@@ -34,14 +33,12 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // Validate email
     if (!this.email) {
       this.emailError = 'Email é obrigatório';
     } else if (!this.isValidEmail(this.email)) {
       this.emailError = 'Email inválido';
     }
 
-    // Validate password
     if (!this.password) {
       this.passwordError = 'Senha é obrigatória';
     } else if (this.password.length < 6) {
@@ -53,10 +50,8 @@ export class LoginComponent {
       return;
     }
 
-    // First, get the CSRF token
     this.httpTokenService.getCrsfToken().subscribe({
       next: () => {
-        // Then attempt login with proper confirmation
         this.usersService.login({
           email: this.email,
           password: this.password
@@ -65,9 +60,7 @@ export class LoginComponent {
             this.isLoading = false;
             console.log('Login successful:', response);
             
-            // Only navigate after successful confirmation
             if (response && response.status !== 'error') {
-              // Force page reload to clear history
               window.location.href = '/';
             } else {
               this.errorMessage = response.message || 'Login falhou. Por favor, verifique suas credenciais.';
@@ -77,7 +70,6 @@ export class LoginComponent {
             this.isLoading = false;
             console.error('Login error:', error);
             
-            // Handle different error types
             if (error.status === 422) {
               this.errorMessage = 'Credenciais inválidas. Por favor, verifique seu email e senha.';
             } else if (error.status === 401) {
