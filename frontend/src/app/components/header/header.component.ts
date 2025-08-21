@@ -6,19 +6,21 @@ import { UsersService } from '../../_services/users.service';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  user = {name: 'No Login', role: null};
+  user = { name: 'No Login', role: null };
   isAdmin = false;
+  isDropdownOpen = false;
 
   constructor(
     private router: Router,
     private httpTokenService: HttpTokenService,
     private usersService: UsersService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadUserInfo();
@@ -32,14 +34,11 @@ export class HeaderComponent implements OnInit {
             name: userData.name || 'User',
             role: userData.category || null
           };
-          this.isAdmin = userData.category == 'admin';
-          
-          localStorage.setItem('userRole', userData.category || '');
+          this.isAdmin = userData.category === 'admin';
         }
       },
-      error: (error) => {
-        console.error('Error loading user info:', error);
-        this.user = {name: 'No Login', role: null};
+      error: () => {
+        this.user = { name: 'No Login', role: null };
         this.isAdmin = false;
       }
     });
@@ -52,8 +51,7 @@ export class HeaderComponent implements OnInit {
         localStorage.removeItem('userRole');
         this.router.navigate(['/login']);
       },
-      error: (error) => {
-        console.error('Logout error:', error);
+      error: () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userRole');
         this.router.navigate(['/login']);
@@ -63,5 +61,14 @@ export class HeaderComponent implements OnInit {
 
   navigateToProductRegister() {
     this.router.navigate(['/registerproduct']);
+    this.closeDropdown();
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
   }
 }

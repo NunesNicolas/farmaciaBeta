@@ -3,19 +3,25 @@
         <img src="assets/logo.png" alt="Farmácia Beta" height="60px">
     </a>
     <div class="header-actions">
-        <div class="admin-actions" *ngIf="isAdmin">
-            <button class="register-product-btn" (click)="navigateToProductRegister()">
-                Cadastrar Produto
-            </button>
-        </div>
-        <div class="login-icon">
-            <a href="/login" class="user-icon-link">
+        <div class="user-dropdown-container">
+            <button class="user-profile-btn" (click)="toggleDropdown()">
                 <i class="bi bi-person-circle" style="font-size: 2rem; color: #333;"></i>
-                <span class="user-icon-text">{{user.name}}</span>
-            </a>
-        </div>
-        <div class="logout-icon">
-            <button class="logout-btn" (click)="logout()">Logout</button>
+                <span class="user-name">{{ user.name }}</span>
+            </button>
+
+            <div class="user-dropdown-menu" [class.show]="isDropdownOpen">
+                <a 
+                    *ngIf="isAdmin" 
+                    class="dropdown-item" 
+                    (click)="navigateToProductRegister()">
+                    Cadastrar Produto
+                </a>
+                <a 
+                    class="dropdown-item logout-link" 
+                    (click)="logout()">
+                    Sair
+                </a>
+            </div>
         </div>
     </div>
 </header>
