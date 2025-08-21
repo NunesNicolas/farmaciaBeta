@@ -19,7 +19,7 @@ export class ShowcaseComponent implements OnInit {
 
   isLoading = true;
   currentPage = 1;
-  perPage = 10;
+  perPage = 8;
   lastPage = 1;
   products: Product[] = [];
 

@@ -9,6 +9,8 @@
         <div class="select-wrapper">
           <select id="category" [(ngModel)]="selectedCategory" (change)="applyFilters()">
             <option value="">Todas as Categorias</option>
+            <option value="medicamento">Medicamentos</option>
+            <option value="cosmetico">Cosméticos</option>
             <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
           </select>
         </div>

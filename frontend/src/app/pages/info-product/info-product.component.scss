@@ -1,3 +1,4 @@
+/* --- Variáveis --- */
 $primary-color: #4f7c78;
 $secondary-color: #82ada3;
 $tertiary-color: #a3c4c2;
@@ -164,6 +165,62 @@ $border-light: 1px solid #e0e0e0;
   }
 }
 
+.related-products-section {
+  max-width: 1200px;
+  margin: 4rem auto 2rem;
+  padding: 0 1rem;
+}
+
+.related-products-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.related-products-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: $primary-color;
+  flex-shrink: 0;
+}
+
+.divider {
+  flex-grow: 1;
+  border: 0;
+  height: 2px;
+  background: linear-gradient(to right, $secondary-color, transparent);
+  margin: 0;
+}
+
+.related-products-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.related-product-link {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.no-products-message {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-top: 3rem;
+  background: $white;
+  border: $border-light;
+  box-shadow: $shadow-light;
+  color: #6c757d;
+}
+
 @media (max-width: 768px) {
   .product-page-container {
     flex-direction: column;
@@ -189,5 +246,9 @@ $border-light: 1px solid #e0e0e0;
   .add-to-cart-btn {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
+  }
+  
+  .related-products-list {
+    grid-template-columns: 1fr;
   }
 }

@@ -2,36 +2,65 @@
 <div class="product-page-container">
   <div class="image-section">
     <div class="image-wrapper">
-      <img [src]="product.img" [alt]="product.name" class="product-image"/>
+      <img [src]="product?.img" [alt]="product?.name" class="product-image" />
     </div>
     <button *ngIf="isAdmin()" class="edit-btn" (click)="editProduct()">
       <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+        />
       </svg>
       Editar Produto
     </button>
   </div>
-  
+
   <div class="info-section">
     <div class="product-details">
-      <h1 class="product-title">{{ product.name }}</h1>
-      <p class="product-description">{{ product.description }}</p>
-      
+      <h1 class="product-title">{{ product?.name }}</h1>
+      <p class="product-description">{{ product?.description }}</p>
+
       <div class="product-meta">
         <span class="product-category">
-          <span class="label">Categoria:</span> {{ product.category }}
+          <span class="label">Categoria:</span> {{ product?.category }}
         </span>
       </div>
     </div>
-    
+
     <div class="purchase-info">
-      <span class="product-price">R$ {{ product.price }}</span>
+      <span class="product-price">R$ {{ product?.price }}</span>
       <button class="add-to-cart-btn">
         Adicionar ao Carrinho
         <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.183 1.77.707 1.77H19m-4.5 0a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.183 1.77.707 1.77H19m-4.5 0a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+          />
         </svg>
       </button>
     </div>
+  </div>
+</div>
+
+<div class="related-products-section">
+  <div class="related-products-header">
+    <h3 class="related-products-title">Produtos Relacionados</h3>
+    <hr class="divider">
+  </div>
+  <div class="related-products-list">
+    <ng-container *ngIf="relatedProducts.length > 0; else noRelatedProducts">
+      <a *ngFor="let relatedProduct of relatedProducts" (click)="navigateToProduct(relatedProduct.id)" class="related-product-link">
+        <app-card-item [product]="relatedProduct"></app-card-item>
+      </a>
+    </ng-container>
+    <ng-template #noRelatedProducts>
+      <div class="no-products-message">
+        Nenhum produto relacionado encontrado.
+      </div>
+    </ng-template>
   </div>
 </div>
