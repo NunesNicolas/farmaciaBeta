@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,14 +8,16 @@ import { HttpTokenService } from '../../auth/http-token.service';
 
 @Component({
   selector: 'app-showcase',
+  standalone: true,
   imports: [CommonModule, FormsModule, HeaderComponent, CardItemComponent],
   templateUrl: './showcase.component.html',
   styleUrl: './showcase.component.scss',
 })
-export class ShowcaseComponent {
+export class ShowcaseComponent implements OnInit {
   errMessage!: string | null;
   user!: any | null;
 
+  isLoading = true;
   currentPage = 1;
   perPage = 10;
   lastPage = 1;
@@ -33,7 +35,14 @@ export class ShowcaseComponent {
     private svc: HttpTokenService
   ) {}
 
+  ngOnInit(): void {
+    this.loadCategories();
+    this.loadProducts(1);
+  }
+
   loadProducts(page: number = 1) {
+    this.isLoading = true;
+    this.errMessage = null;
     this.currentPage = page;
 
     this.productService.getProducts(
@@ -42,17 +51,31 @@ export class ShowcaseComponent {
       this.selectedCategory || undefined,
       this.minPrice || undefined,
       this.maxPrice || undefined
-    ).subscribe((res: any) => {
-      this.products = res.data;
-      this.currentPage = res.current_page;
-      this.lastPage = res.last_page;
+    ).subscribe({
+      next: (res: any) => {
+        this.products = res.data;
+        this.currentPage = res.current_page;
+        this.lastPage = res.last_page;
+        this.isLoading = false;
+        
+        if (this.products.length === 0) {
+          this.errMessage = 'Nenhum produto encontrado com os filtros aplicados.';
+        }
+      },
+      error: (err) => {
+        this.errMessage = 'Não foi possível carregar os produtos. Por favor, tente novamente mais tarde.';
+        this.isLoading = false;
+        this.products = [];
+      }
     });
   }
 
   loadCategories() {
-    this.productService.getProducts(1, 100).subscribe((res: any) => {
-      const uniqueCategories = [...new Set(res.data.map((product: Product) => product.category))];
-      this.categories = uniqueCategories as string[];
+    this.productService.getProducts(1, 100).subscribe({
+      next: (res: any) => {
+        const uniqueCategories = [...new Set(res.data.map((product: Product) => product.category))];
+        this.categories = uniqueCategories as string[];
+      }
     });
   }
 
@@ -85,41 +108,33 @@ export class ShowcaseComponent {
     const maxVisiblePages = 5;
     
     if (this.lastPage <= maxVisiblePages) {
-      // Show all pages if total is small
       for (let i = 1; i <= this.lastPage; i++) {
         pages.push(i);
       }
     } else {
-      // Show first page
       pages.push(1);
       
-      // Calculate range around current page
       let start = Math.max(2, this.currentPage - 1);
       let end = Math.min(this.lastPage - 1, this.currentPage + 1);
       
-      // Add ellipsis if needed
       if (start > 2) {
         pages.push(-1);
       }
       
-      // Add middle pages
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
       
-      // Add ellipsis if needed
       if (end < this.lastPage - 1) {
         pages.push(-1);
       }
       
-      // Add last page
       pages.push(this.lastPage);
     }
     
     return pages;
   }
 
-  // Modal methods
   openFilterModal() {
     this.isFilterModalOpen = true;
     document.body.style.overflow = 'hidden';
@@ -140,15 +155,10 @@ export class ShowcaseComponent {
     this.closeFilterModal();
   }
 
-  // Close modal on ESC key
   @HostListener('document:keydown.escape', ['$event'])
   handleEscapeKey(event: KeyboardEvent) {
     if (this.isFilterModalOpen) {
       this.closeFilterModal();
     }
-  }
-
-  ngOnInit(): void {
-    this.loadProducts(1);
   }
 }

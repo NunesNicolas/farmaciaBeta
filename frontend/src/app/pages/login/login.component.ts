@@ -58,13 +58,8 @@ export class LoginComponent {
         }).subscribe({
           next: (response) => {
             this.isLoading = false;
-            console.log('Login successful:', response);
             
-            if (response && response.status !== 'error') {
-              window.location.href = '/';
-            } else {
-              this.errorMessage = response.message || 'Login falhou. Por favor, verifique suas credenciais.';
-            }
+             window.location.href = '/';
           },
           error: (error) => {
             this.isLoading = false;

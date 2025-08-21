@@ -23,7 +23,7 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->input('max_price'));
         }
 
-        $perPage = $request->input('perPage', 10);
+        $perPage = $request->input('perPage', 8);
         $products = $query->paginate($perPage);
         
         return response()->json($products);

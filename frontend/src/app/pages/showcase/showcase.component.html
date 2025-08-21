@@ -1,89 +1,109 @@
 <app-header></app-header>
+<div class="product-page">
 
-<div class="filter-container">
-      <h3 style="text-align: center;">Filtrar Produtos</h3>
-  <div class="filter-form">
+  <div class="filter-section">
+    <h3 class="filter-title">Filtrar Produtos</h3>
+    <div class="filter-form">
+      <div class="filter-group">
+        <label for="category">Categoria</label>
+        <div class="select-wrapper">
+          <select id="category" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+            <option value="">Todas as Categorias</option>
+            <option value="medicamento">Medicamentos</option>
+            <option value="cosmetico">Cosméticos</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+      </div>
 
-    
-    <div class="filter-group">
-      <label for="category">Categoria:</label>
-      <select id="category" [(ngModel)]="selectedCategory" (change)="applyFilters()">
-        <option value="">Todas as Categorias</option>
-        <option value="medicamento">Medicamentos</option>
-        <option value="cosmetico">Cosméticos</option>
-        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-      </select>
-    </div>
+      <div class="filter-group">
+        <label for="minPrice">Preço Mínimo</label>
+        <input type="number" id="minPrice" [(ngModel)]="minPrice" placeholder="R$ 0,00" (change)="applyFilters()" min="0" step="0.01">
+      </div>
 
-    <div class="filter-group">
-      <label for="minPrice">Preço Mínimo:</label>
-      <input type="number" id="minPrice" [(ngModel)]="minPrice" placeholder="0" (change)="applyFilters()" min="0" step="0.01">
-    </div>
+      <div class="filter-group">
+        <label for="maxPrice">Preço Máximo</label>
+        <input type="number" id="maxPrice" [(ngModel)]="maxPrice" placeholder="R$ 9999,00" (change)="applyFilters()" min="0" step="0.01">
+      </div>
 
-    <div class="filter-group">
-      <label for="maxPrice">Preço Máximo:</label>
-      <input type="number" id="maxPrice" [(ngModel)]="maxPrice" placeholder="9999" (change)="applyFilters()" min="0" step="0.01">
+      <div class="filter-actions">
+        <button class="btn btn-primary" (click)="applyFilters()">Aplicar Filtros</button>
+        <button class="btn btn-secondary" (click)="clearFilters()">Limpar</button>
+      </div>
     </div>
   </div>
-  <div class="filter-actions">
-      <button class="btn btn-primary" (click)="applyFilters()">Aplicar Filtros</button>
-      <button class="btn btn-secondary" (click)="clearFilters()">Limpar Filtros</button>
+
+  <div class="products-container">
+    <ng-container *ngIf="isLoading; else loadedProducts">
+      <!-- Skeleton Loaders -->
+      <div *ngFor="let i of [1,2,3,4,5,6]" class="product-card-wrapper" 
+           style="background-color: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; width: 100%; max-width: 320px; border: 1px solid #e0e0e0;">
+        <div style="width: 100%; height: 200px; background-color: #e0e0e0; border-bottom: 1px solid #f0f0f0; animation: pulse-bg 1.5s infinite ease-in-out alternate;"></div>
+        <div style="padding: 1rem; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 120px; background-color: #f8f8f8;">
+          <div style="height: 1.1rem; width: 80%; margin: 0 auto 0.5rem auto; background-color: #e0e0e0; border-radius: 4px; animation: pulse-bg 1.5s infinite ease-in-out alternate;"></div>
+          <div style="height: 1.5rem; width: 60%; margin: 0.5rem auto 0 auto; background-color: #e0e0e0; border-radius: 4px; animation: pulse-bg 1.5s infinite ease-in-out alternate;"></div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #loadedProducts>
+      <ng-container *ngIf="products.length > 0; else noProducts">
+        <app-card-item *ngFor="let product of products" [product]="product" class="product-card-wrapper"></app-card-item>
+      </ng-container>
+    </ng-template>
+  </div>
+
+  <ng-template #noProducts>
+    <div *ngIf="errMessage" class="error-message">
+      {{ errMessage }}
     </div>
-</div>
+    <div *ngIf="!errMessage" class="no-products-message">
+      Nenhum produto encontrado com os filtros aplicados.
+    </div>
+  </ng-template>
 
-<div class="products-container">
-  <app-card-item *ngFor="let product of products" [product]="product"></app-card-item>
-</div>
-
-<div *ngIf="errMessage" class="error-message">
-  {{ errMessage }}
-</div>
-
-<div *ngIf="products.length === 0" class="no-products-message">
-  Nenhum produto encontrado com os filtros aplicados.
-</div>
-
-<div class="pagination-container">
-  <nav class="pagination-nav" aria-label="Paginação de produtos">
-    <button 
-      class="pagination-btn pagination-btn--prev" 
-      (click)="prevPage()" 
-      [disabled]="currentPage === 1"
-      aria-label="Página anterior">
-      <svg class="pagination-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-      </svg>
-      Anterior
-    </button>
-
-    <div class="pagination-numbers">
+  <div class="pagination-container" *ngIf="products.length > 0 && !isLoading">
+    <nav class="pagination-nav" aria-label="Paginação de produtos">
       <button 
-        *ngFor="let page of getPageNumbers()" 
-        class="pagination-number"
-        [class.active]="page === currentPage"
-        [class.ellipsis]="page === -1"
-        [disabled]="page === -1"
-        (click)="page !== -1 && loadProducts(page)"
-        [attr.aria-label]="'Ir para página ' + page"
-        [attr.aria-current]="page === currentPage ? 'page' : null">
-        {{ page === -1 ? '...' : page }}
+        class="pagination-btn pagination-btn--prev" 
+        (click)="prevPage()" 
+        [disabled]="currentPage === 1"
+        aria-label="Página anterior">
+        <svg class="pagination-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Anterior
       </button>
+
+      <div class="pagination-numbers">
+        <button 
+          *ngFor="let page of getPageNumbers()" 
+          class="pagination-number"
+          [class.active]="page === currentPage"
+          [class.ellipsis]="page === -1"
+          [disabled]="page === -1"
+          (click)="page !== -1 && loadProducts(page)"
+          [attr.aria-label]="'Ir para página ' + page"
+          [attr.aria-current]="page === currentPage ? 'page' : null">
+          {{ page === -1 ? '...' : page }}
+        </button>
+      </div>
+
+      <button 
+        class="pagination-btn pagination-btn--next" 
+        (click)="nextPage()" 
+        [disabled]="currentPage === lastPage"
+        aria-label="Próxima página">
+        Próximo
+        <svg class="pagination-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </nav>
+    
+    <div class="pagination-info">
+      <p>Mostrando {{ products.length }} produtos</p>
+      <span>Página {{ currentPage }} de {{ lastPage }}</span>
     </div>
-
-    <button 
-      class="pagination-btn pagination-btn--next" 
-      (click)="nextPage()" 
-      [disabled]="currentPage === lastPage"
-      aria-label="Próxima página">
-      Próximo
-      <svg class="pagination-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-      </svg>
-    </button>
-  </nav>
-
-  <div class="pagination-info">
-    <span>Página {{ currentPage }} de {{ lastPage }}</span>
-    <span class="pagination-total">{{ products.length }} produtos</span>
   </div>
+
 </div>

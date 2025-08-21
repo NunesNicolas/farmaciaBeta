@@ -33,7 +33,7 @@ export class ProductService {
     private authService: AuthService
   ) {}
 
-  getProducts(page: number = 1, perPage: number = 10, category?: string, minPrice?: number, maxPrice?: number): Observable<any> {
+  getProducts(page: number = 1, perPage: number = 8, category?: string, minPrice?: number, maxPrice?: number): Observable<any> {
     let url = `${this.apiUrl}?page=${page}&perPage=${perPage}`;
     
     if (category) {
