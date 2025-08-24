@@ -10,18 +10,19 @@ import { UsersService } from './_services/users.service';
   styleUrl: './app.component.scss'
 })
 
-
-
 export class AppComponent implements OnInit {
   title = 'frontend';
-
 
   constructor(private authService: UsersService, private tSvc: HttpTokenService) {}
 
   ngOnInit(): void {
-    this.authService.getUser().subscribe(user => {
-      console.log('Usuário autenticado:', user);
-    });
-    this.tSvc.getCrsfToken().subscribe(x => console.log(x));
+    const user = localStorage.getItem('user');
+    if (!user) {
+      this.authService.getUser().subscribe(user => {
+        localStorage.setItem('user', JSON.stringify(user));
+      });
+    } else {
+    }
+    this.tSvc.getCrsfToken().subscribe();
   }
 }

@@ -12,7 +12,7 @@ import { UsersService } from '../../_services/users.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  user = { name: 'No Login', role: null };
+  user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : { name: 'No Login', role: null };
   isAdmin = false;
   isDropdownOpen = false;
 
@@ -35,11 +35,17 @@ export class HeaderComponent implements OnInit {
             role: userData.category || null
           };
           this.isAdmin = userData.category === 'admin';
+          
+          // Set user role in localStorage for other components to use
+          if (userData.category) {
+            localStorage.setItem('userRole', userData.category);
+          }
         }
       },
       error: () => {
         this.user = { name: 'No Login', role: null };
         this.isAdmin = false;
+        localStorage.removeItem('userRole');
       }
     });
   }

@@ -17,7 +17,7 @@ class Admin extends Seeder
         DB::table('users')->insert([
             'name' => 'Administrador',
             'email' => 'admin@exemplo.com',
-            'password' => Hash::make('admin123'), // senha criptografada
+            'password' => Hash::make('admin123'),
             'category' => 'admin',
             'created_at' => now(),
             'updated_at' => now(),
@@ -27,7 +27,7 @@ class Admin extends Seeder
         DB::table('users')->insert([
             'name' => 'Cliente',
             'email' => 'client@exemplo.com',
-            'password' => Hash::make('client123'), // senha criptografada
+            'password' => Hash::make('client123'),
             'category' => 'client',
             'created_at' => now(),
             'updated_at' => now(),
