@@ -35,8 +35,7 @@ export class HeaderComponent implements OnInit {
             role: userData.category || null
           };
           this.isAdmin = userData.category === 'admin';
-          
-          // Set user role in localStorage for other components to use
+          localStorage.setItem('user', JSON.stringify(userData));
           if (userData.category) {
             localStorage.setItem('userRole', userData.category);
           }
@@ -45,6 +44,7 @@ export class HeaderComponent implements OnInit {
       error: () => {
         this.user = { name: 'No Login', role: null };
         this.isAdmin = false;
+        localStorage.removeItem('user');
         localStorage.removeItem('userRole');
       }
     });
@@ -53,12 +53,12 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.usersService.logout().subscribe({
       next: () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         localStorage.removeItem('userRole');
         this.router.navigate(['/login']);
       },
       error: () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         localStorage.removeItem('userRole');
         this.router.navigate(['/login']);
       }
