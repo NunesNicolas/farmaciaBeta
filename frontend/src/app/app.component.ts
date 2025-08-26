@@ -17,11 +17,12 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const user = localStorage.getItem('user');
-    if (!user) {
+    if (!user && window.location.pathname !== '/login') {
       this.authService.getUser().subscribe(user => {
-        localStorage.setItem('user', JSON.stringify(user));
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+        }
       });
-    } else {
     }
     this.tSvc.getCrsfToken().subscribe();
   }

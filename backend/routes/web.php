@@ -19,7 +19,8 @@ Route::get('/swagger/openapi.json', function () {
     return Response::json(['error' => 'OpenAPI specification not found'], 404);
 });
 
-// Route for Swagger UI documentation
 Route::get('/api-docs', [SwaggerController::class, 'index']);
+
+require __DIR__.'/auth.php';
 
 
