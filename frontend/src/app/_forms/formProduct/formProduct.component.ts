@@ -31,11 +31,9 @@ export class formProduct implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    // Se productData for passado via @Input(), usar esses dados
     if (this.productData) {
       this.populateForm();
     }
-    // Caso contrário, verificar history.state (para casos de navegação)
     else if (history.state && history.state['product']) {
       this.productData = history.state['product'];
       this.populateForm();
@@ -43,7 +41,6 @@ export class formProduct implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    // Se productData mudar após o init, atualizar o formulário
     if (this.productData) {
       this.populateForm();
     }
@@ -94,17 +91,13 @@ export class formProduct implements OnInit, OnChanges {
       reader.onload = (e) => {
         const img = new Image();
         img.onload = () => {
-          // Compressão simples no frontend
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          
-          // Dimensões máximas para reduzir tamanho
           const maxWidth = 600;
           const maxHeight = 450;
           
           let { width, height } = img;
           
-          // Redimensionar se necessário
           if (width > maxWidth || height > maxHeight) {
             const ratio = Math.min(maxWidth / width, maxHeight / height);
             width *= ratio;
@@ -113,22 +106,18 @@ export class formProduct implements OnInit, OnChanges {
           
           canvas.width = width;
           canvas.height = height;
-          
-          // Desenhar imagem redimensionada
+
           ctx!.drawImage(img, 0, 0, width, height);
           
-          // Converter para base64 com qualidade reduzida
           const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
           
-          // Verificar tamanho final
-          if (compressedDataUrl.length > 500000) { // ~500KB
+          if (compressedDataUrl.length > 500000) {
             alert('A imagem comprimida ainda é muito grande. Tente uma imagem menor.');
             return;
           }
           
           this.previewUrl = compressedDataUrl;
           
-          // Atualizar formulário com imagem comprimida
           this.productForm.patchValue({
             img: compressedDataUrl
           });
