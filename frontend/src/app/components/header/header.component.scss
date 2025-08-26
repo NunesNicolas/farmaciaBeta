@@ -44,7 +44,6 @@ $shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
   color: $white;
   
   &:hover {
-    background-color: darken($secondary-color, 8%);
     box-shadow: 0 4px 12px rgba($secondary-color, 0.3);
   }
 
@@ -100,16 +99,13 @@ $shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
 
   &:hover {
     background-color: $light-gray;
-    color: darken($primary-color, 10%);
   }
 
   &.logout-link {
     color: #d9534f;
     font-weight: 600;
     
-    &:hover {
-      background-color: lighten(#d9534f, 40%);
-    }
+
   }
 }
 

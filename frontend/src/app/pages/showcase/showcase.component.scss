@@ -133,7 +133,6 @@ select {
     box-shadow: 0 4px 8px rgba($primary-color, 0.3);
 
     &:hover {
-      background: darken($primary-color, 8%);
       transform: translateY(-2px);
     }
   }
@@ -263,7 +262,6 @@ select {
 .error-message {
   color: #d9534f;
   border-color: #d9534f;
-  background-color: lighten(#d9534f, 40%);
 }
 
 .no-products-message {

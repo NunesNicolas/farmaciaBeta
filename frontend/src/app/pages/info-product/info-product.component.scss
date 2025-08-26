@@ -135,7 +135,6 @@ $border-light: 1px solid #e0e0e0;
   margin-top: 1rem;
   
   &:hover {
-    background: darken($primary-color, 8%);
     transform: translateY(-2px);
   }
   
@@ -153,7 +152,6 @@ $border-light: 1px solid #e0e0e0;
   box-shadow: 0 4px 12px rgba($secondary-color, 0.3);
   
   &:hover {
-    background: darken($secondary-color, 8%);
     transform: translateY(-2px);
   }
 
